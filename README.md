@@ -1,1 +1,1 @@
-# thus_tap_nhom
+clone về rồi chạy docker-compose up -d là được nhá
