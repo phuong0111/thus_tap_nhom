@@ -1,0 +1,29 @@
+logging.level: debug
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0600
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+
+filebeat.inputs:
+- type: container
+  paths:
+    - /var/lib/docker/containers/*/*.log
+  multiline.type: pattern
+  # multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.pattern: '^[0-9]{1,2}-[0-9]{1,2}-[0-9]{4}'
+  # multiline.pattern: '^%{IPORHOST:serverip}'
+  multiline.negate: true
+  multiline.match: after
+  multiline.max_lines: 200  
+  encoding: utf-8
+
+
+output.logstash:
+   hosts: ["logstash-01:5400"]
